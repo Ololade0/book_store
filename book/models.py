@@ -8,6 +8,12 @@ class Publisher(models.Model):
     website = models.URLField()
 
 
+class Author(models.Model):
+    first_name = models.CharField(max_length=255)
+    last_name = models.CharField(max_length=255)
+    email = models.EmailField(unique=True)
+
+
 class Book(models.Model):
     GENRE_CHOICES = (
         ("C", "Comedy"),
@@ -25,14 +31,8 @@ class Book(models.Model):
     edition = models.PositiveSmallIntegerField()
     price = models.DecimalField(max_digits=6, decimal_places=2)
     genre = models.CharField(max_length=2, choices=GENRE_CHOICES, default="R")
-    publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE)
-
-
-class Author(models.Model):
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
-    email = models.EmailField(unique=True)
-
+    publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE, related_name="books")
+    authors = models.ManyToManyField(Author, related_name="books")
 
 
 class Address(models.Model):
@@ -42,4 +42,3 @@ class Address(models.Model):
     zip = models.CharField(max_length=6, validators=[MinLengthValidator(5, "code must be greater than five"),
                                                      MaxLengthValidator(6, "code cannot exceed the length six")])
     publisher = models.OneToOneField(Publisher, on_delete=models.CASCADE)
-
