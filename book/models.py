@@ -1,11 +1,16 @@
 from django.db import models
 from django.core.validators import MaxLengthValidator, MinLengthValidator
+from django.utils.text import slugify
+from django.urls import reverse
 
 
 class Publisher(models.Model):
     name = models.CharField(max_length=255)
     email = models.EmailField()
     website = models.URLField()
+
+    def get_absolute_url(self):
+        return reverse("book_store:publisher-details", args=[self.id])
 
 
 class Author(models.Model):
@@ -33,6 +38,13 @@ class Book(models.Model):
     genre = models.CharField(max_length=2, choices=GENRE_CHOICES, default="R")
     publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE, related_name="books")
     authors = models.ManyToManyField(Author, related_name="books")
+
+    def __str__(self):
+        return self.title
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.title)
+        super().save(*args, **kwargs)
 
 
 class Address(models.Model):
