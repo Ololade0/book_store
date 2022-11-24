@@ -33,14 +33,16 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    # 'django.contrib.admin',
+    'book_store.apps.BookStoreAdminConfig',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'book.apps.BookConfig',
-    'debug_toolbar'
+    'debug_toolbar',
+    "rest_framework"
 
 ]
 
@@ -87,7 +89,7 @@ DATABASES = {
         "USER": env("DB_USER"),
         "PASSWORD": env("DB_PASSWORD"),
         "HOST": env("DB_HOST"),
-        # "POST": env("DB_POST")
+        "PORT": env("DB_PORT")
     }
 }
 
@@ -137,3 +139,5 @@ INTERNAL_IPS = [
 
     "127.0.0.1",
 ]
+
+ADMIN_URL = "admin/"

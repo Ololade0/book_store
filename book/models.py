@@ -33,7 +33,7 @@ class Book(models.Model):
     isbn = models.CharField(max_length=20)
     date_added = models.DateField(auto_now_add=True)
     date_published = models.DateField()
-    edition = models.PositiveSmallIntegerField()
+    edition = models.PositiveSmallIntegerField(blank=True)
     price = models.DecimalField(max_digits=6, decimal_places=2)
     genre = models.CharField(max_length=2, choices=GENRE_CHOICES, default="R")
     publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE, related_name="books")
@@ -41,10 +41,14 @@ class Book(models.Model):
 
     def __str__(self):
         return self.title
+        # f"({self.price})"
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.title)
         super().save(*args, **kwargs)
+
+    class Meta:
+        ordering = ["title"]
 
 
 class Address(models.Model):
