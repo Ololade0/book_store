@@ -12,5 +12,8 @@ app_name = "book_store"
 
 
 urlpatterns = [
-    path("books/", views.book_list, name="bool_list")
+    path("books/", views.book_list, name="bool_list"),
+    path("books/<int:pk>/", views.book_detail, name="book-details"),
+    path("publishers/", views.publisher_list, name="publisher-list"),
+    path("publishers/<int:pk>/", views.publisher_detail, name="publisher-detail")
 ]
