@@ -1,35 +1,70 @@
-from django.shortcuts import get_object_or_404
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
+
+from rest_framework.generics import ListCreateAPIView, RetrieveAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.viewsets import ModelViewSet
+
+import book
 from .models import Book, Publisher
-from .serializers import BookSerializers
-from .serializers import PublisherSerializer
+from .serializers import BookSerializers, BookCreateSerializers, PublisherSerializer
 
 
-@api_view()
-def book_list(request):
-    Queryset = Book.objects.select_related('publisher').all()
-    serializer = BookSerializers(Queryset, many=True, context={"request" : request})
-    return Response(serializer.data)
+class BookViewSet(ModelViewSet):
+    queryset = Book.objects.select_related('publisher').all()
 
 
-@api_view()
-def book_detail(request, pk):
-    book = get_object_or_404(Book, pk=pk)
-    serializer = BookSerializers(book)
-    return Response(serializer.data)
+
+# class BookList(ListCreateAPIView):
+#     queryset = Book.objects.select_related('publisher').all()
+#     serializer_class = BookSerializers
+#
+#
+# class BookDetail(RetrieveUpdateDestroyAPIView):
+#     queryset = Book.objects.all()
+#     serializer_class = BookSerializers
+#
+#
+# class PublisherList(ListCreateAPIView):
+#     queryset = Publisher.objects.all()
+#     serializer_class = PublisherSerializer
+#
+#
+# class PublisherDetail(RetrieveUpdateDestroyAPIView):
+#     queryset = Publisher.objects.all()
+#     serializer_class = PublisherSerializer
+#
+#
+#
 
 
-@api_view()
-def publisher_list(request):
-    Queryset = Publisher.objects.all()
-    serializer = PublisherSerializer(Queryset, many=True)
-
-    return Response(serializer.data)
 
 
-@api_view()
-def publisher_detail(request, pk):
-    publisher = get_object_or_404(Publisher, pk=pk)
-    serializer = PublisherSerializer(publisher)
-    return Response(serializer.data)
+# @api_view(['GET', 'POST'])
+# def publisher_list(request):
+#     if request.method == 'GET':
+#         Queryset = Publisher.objects.annotate(
+#             number_of_books_oublishes=Count('books')
+#         ).all()
+#
+#         serializer = PublisherSerializer(Queryset, many=True)
+#
+#         return Response(serializer.data)
+#     elif request.method == 'POST':
+#         serializer = PublisherSerializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         serializer.save()
+#         return Response(serializer.data, status=status.HTTP_201_CREATED)
+#
+#
+# @api_view(['GET', 'PATCH', 'DELETE'])
+# def publisher_detail(request, pk):
+#     publisher = get_object_or_404(Publisher, pk=pk)
+#     if request.method == 'GET':
+#         serializer = PublisherSerializer(publisher)
+#         return Response(serializer.data)
+#     elif request.method == 'PATCH':
+#          serializer = PublisherSerializer(publisher, data=request.data, partial=True)
+#          serializer.is_valid(raise_exception=True)
+#          serializer.save()
+#          return Response(serializer.data)
+#     elif request.method == 'DELETE':
+#         publisher.delete()
+#         return Response(status=status.HTTP_204_NO_CONTENT)
