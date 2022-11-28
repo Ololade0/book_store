@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'book.apps.BookConfig',
     'debug_toolbar',
-    "rest_framework"
+    "rest_framework",
+    'django_filters'
 
 ]
 
@@ -137,5 +138,9 @@ INTERNAL_IPS = [
 ADMIN_URL = "admin/"
 
 REST_FRAMEWORK = {
-    "COERCE_DECIMAL_TO_STRING": False
+    "COERCE_DECIMAL_TO_STRING": False,
+    "SEARCH_PARAM": "Search_by",
+    "ORDERING_PARAM" : "order_by",
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 2
 }
